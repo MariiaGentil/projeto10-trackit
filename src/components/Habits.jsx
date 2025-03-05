@@ -1,23 +1,23 @@
-import { Link } from "react-router-dom"
-import { useContext } from "react"
+import { useState } from "react"
 import styled from "styled-components"
-import { UserContext } from "../contexts/UserContext"
 import { HabitHeader } from "./HabitHeader"
 import { HabitMain } from "./HabitMain"
-
+import { HabitFooter } from "./HabitFooter"
 
 export const Habits = () => {
-    const { userData } = useContext(UserContext)
+    const [percentage, setPercentage] = useState(0.1)
 
     return (
         <DivHabitMain>
             <HabitHeader />
-            <HabitMain />
+            <HabitMain setPercentage={setPercentage}/>
+            <HabitFooter percentage={percentage} />
         </DivHabitMain>
     )
 }
 
 const DivHabitMain = styled.div`
     background-color: var(--background);
-    height: 100vh;
+    height: calc(100vh - 70px);
+    overflow-y: auto;
 `
