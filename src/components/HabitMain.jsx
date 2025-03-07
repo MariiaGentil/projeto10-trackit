@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { UserContext } from "../contexts/UserContext"
 import axios from "axios"
 
-export const HabitMain = ({setPercentage}) => {
+export const HabitMain = () => {
     const { userData } = useContext(UserContext)
     const [toggleAddTemp, setToggleAddTemp] = useState(false)
     const [refresh, setRefresh] = useState([])
@@ -19,13 +19,13 @@ export const HabitMain = ({setPercentage}) => {
         <>
             <HabitTitle setToggleAddTemp={setToggleAddTemp} />
             {toggleAddTemp ? < HabitAddCard setToggleAddTemp={setToggleAddTemp} config={config} daysWeek={daysWeek} setRefresh={setRefresh}/> : <></>}
-            <HabitsCreated config={config} daysWeek={daysWeek} refresh={refresh}/>
+            <HabitsCreated config={config} daysWeek={daysWeek} refresh={refresh} setRefresh={setRefresh}/>
         </>
     )
 }
 
-const HabitsCreated = ({ config, daysWeek, refresh }) => {
-    const [dataHabits, setDataHabits] = useState(null)
+const HabitsCreated = ({ config, daysWeek, refresh, setRefresh }) => {
+    const [dataHabits, setDataHabits] = useState([])
     let HabitCreatedList = (<></>)
 
     useEffect(() => {
@@ -36,8 +36,14 @@ const HabitsCreated = ({ config, daysWeek, refresh }) => {
         }).catch()
     }, [refresh]);
 
-    if (!dataHabits) {
-        HabitCreatedList = (<p className="msg-no-habits">Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>)
+    function removeHabit(id){
+        const promise = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config)
+        promise.then().catch()
+        setRefresh([])
+    }
+
+    if (dataHabits.length === 0) {
+        HabitCreatedList = (<DivMsg><p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p></DivMsg>)
     } else {
         HabitCreatedList = (
             dataHabits.map(elem => {
@@ -47,6 +53,7 @@ const HabitsCreated = ({ config, daysWeek, refresh }) => {
                         <div className="days-week">
                             {daysWeek.map((dayW, i) => { return (<div className={elem.days.includes(i) ? 'select' : ''}>{dayW.name[0]}</div>) })}
                         </div>
+                        <ion-icon name="trash-outline" onClick={() => {removeHabit(elem.id)}}></ion-icon>
                     </DivHabitAddTemplate>)
             })
         )
@@ -84,8 +91,8 @@ const HabitAddCard = ({ setToggleAddTemp, config, daysWeek, setRefresh }) => {
         e.preventDefault()
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', habitDataAdd, config)
         promise.then().catch()
-        setToggleAddTemp(false)
         setRefresh([])
+        setToggleAddTemp(false)
     }
 
     return (
@@ -125,6 +132,7 @@ const DivHabitAddTemplate = styled.div`
     flex-direction: column;
     align-items: center;
     padding: 20px;
+    position: relative;
 
     input{
         width: 80vw;
@@ -192,7 +200,15 @@ const DivHabitAddTemplate = styled.div`
     
     p{
         color: var(--grey-dark);
-        margin: 0 auto 5px 5px;
+        margin: 0 auto 5px 3%;
+    }
+
+    ion-icon{
+        color: var(--grey-dark);
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        cursor: pointer;
     }
 `
 
@@ -221,4 +237,11 @@ const DivHabitTitle = styled.div`
         color:  var(--white);
         padding-top: 2px;
     }
+`
+
+const DivMsg = styled.div`
+    font-family: var(--primary-font);
+    color: var(--grey-dark);
+    width: 95%;
+    margin: 0 auto;
 `

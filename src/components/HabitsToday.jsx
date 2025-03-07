@@ -1,15 +1,15 @@
 import styled from "styled-components"
 import { HabitHeader } from "./HabitHeader"
-import { HabitMain } from "./HabitMain"
 import { HabitFooter } from "./HabitFooter"
+import { HabitMainToday } from "./HabitMainToday"
 
-export const Habits = ({percentage, setPercentage}) => {
+export const HabitsToday = ({percentage, setPercentage}) => {
     
 
     return (
         <DivHabitMain>
             <HabitHeader />
-            <HabitMain/>
+            <HabitMainToday/>
             <HabitFooter percentage={percentage} />
         </DivHabitMain>
     )

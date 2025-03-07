@@ -1,11 +1,30 @@
 import styled from "styled-components"
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+useNavigate
 
 export const HabitFooter = ({ percentage }) => {
+    const [toggleButtonRoute, setToggleButtonRoute] = useState('Hábitos de hoje')
+    const navigate = useNavigate()
+
+    function routeConfig() {
+        if (toggleButtonRoute === 'Hábitos de hoje') {
+            setToggleButtonRoute('Todos os Hábitos' )
+            navigate('/habitstoday')
+        } else{
+            setToggleButtonRoute('Hábitos de hoje')
+            navigate('/habits')
+        }
+
+    }
+
+    console.log(toggleButtonRoute)
+
     return (
         <DivFooter>
-            <p>Hábitos</p>
+            <p onClick={() => { routeConfig() }} className="route">{toggleButtonRoute}</p>
             <div className="config-progress">
                 <div>
                     <CircularProgressbar value={percentage} text={`Hoje`} styles={buildStyles({
@@ -51,6 +70,12 @@ const DivFooter = styled.div`
         width: 90px;
         height: 90px;
         margin-bottom: 40px;
+    }
+
+    p.route{
+        width: 70px;
+        text-align: center;
+        text-decoration: none;
     }
 
 `
