@@ -1,8 +1,8 @@
 import { Link, useNavigate } from "react-router-dom"
 import { useContext, useState } from "react"
+import { UserContext } from "../contexts/UserContext"
 import styled from "styled-components"
 import axios from "axios"
-import { UserContext } from "../contexts/UserContext"
 
 export const Login = () => {
     const [loginData, setLoginData] = useState({})

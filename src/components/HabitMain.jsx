@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react"
-import styled from "styled-components"
 import { UserContext } from "../contexts/UserContext"
+import styled from "styled-components"
 import axios from "axios"
 
 export const HabitMain = () => {
@@ -38,8 +38,10 @@ const HabitsCreated = ({ config, daysWeek, refresh, setRefresh }) => {
 
     function removeHabit(id){
         const promise = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config)
-        promise.then().catch()
-        setRefresh([])
+        promise.then(() => {
+            setRefresh([])
+        }).catch()
+        
     }
 
     if (dataHabits.length === 0) {
@@ -90,9 +92,10 @@ const HabitAddCard = ({ setToggleAddTemp, config, daysWeek, setRefresh }) => {
     function saveHabit(e) {
         e.preventDefault()
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits', habitDataAdd, config)
-        promise.then().catch()
-        setRefresh([])
-        setToggleAddTemp(false)
+        promise.then(()=>{
+            setRefresh([])
+            setToggleAddTemp(false)
+        }).catch()
     }
 
     return (

@@ -1,30 +1,32 @@
-import styled from "styled-components"
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { PercentContext } from "../contexts/PercentContext";
 import { useNavigate } from "react-router-dom";
-useNavigate
+import styled from "styled-components"
+import "react-circular-progressbar/dist/styles.css";
 
-export const HabitFooter = ({ percentage }) => {
-    const [toggleButtonRoute, setToggleButtonRoute] = useState('Hábitos de hoje')
+
+export const HabitFooter = ({today}) => {
     const navigate = useNavigate()
+    const {percentage, setPercentage} = useContext(PercentContext)
 
-    function routeConfig() {
-        if (toggleButtonRoute === 'Hábitos de hoje') {
-            setToggleButtonRoute('Todos os Hábitos' )
-            navigate('/habitstoday')
-        } else{
-            setToggleButtonRoute('Hábitos de hoje')
-            navigate('/habits')
-        }
-
+    if(percentage === 99){
+        setPercentage(100)
+    } else if(percentage === 1){
+        setPercentage(0)
     }
 
-    console.log(toggleButtonRoute)
+    function routeConfig() {
+        if (!today) {
+            navigate('/habitstoday')
+        } else{
+            navigate('/habits')
+        }
+    }
 
     return (
         <DivFooter>
-            <p onClick={() => { routeConfig() }} className="route">{toggleButtonRoute}</p>
+            <p onClick={() => { routeConfig() }} className="route">{!today ? `Hábitos de Hoje` : `Todos os Hábitos`}</p>
             <div className="config-progress">
                 <div>
                     <CircularProgressbar value={percentage} text={`Hoje`} styles={buildStyles({

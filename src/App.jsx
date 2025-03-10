@@ -1,29 +1,30 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { UserProvider } from "./contexts/UserContext"
+import { PercentProvider } from "./contexts/PercentContext"
 import { Login } from "./components/Login"
 import { Register } from "./components/Register"
 import { Habits } from "./components/Habits"
-import ResetCss from "./styles/resetCss"
-import GlobalStyle from "./styles/globalStyles"
-import { UserProvider } from "./contexts/UserContext"
-import { useState } from "react"
 import { HabitsToday } from "./components/HabitsToday"
+import GlobalStyle from "./styles/globalStyles"
+import ResetCss from "./styles/resetCss"
 
 function App() {
-  const [percentage, setPercentage] = useState(0.1)
 
   return (
     <>
       <ResetCss />
       <GlobalStyle />
       <UserProvider>
+      <PercentProvider>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Login />}></Route>
             <Route path='/register' element={<Register />}></Route>
-            <Route path='/habits' element={<Habits percentage={percentage} setPercentage={setPercentage}/>}></Route>
-            <Route path='/habitstoday'element={<HabitsToday percentage={percentage} setPercentage={setPercentage}/>}></Route>
+            <Route path='/habits' element={<Habits/>}></Route>
+            <Route path='/habitstoday'element={<HabitsToday/>}></Route>
           </Routes>
         </BrowserRouter>
+        </PercentProvider>
       </UserProvider>
     </>
   )

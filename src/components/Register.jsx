@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
 import styled from "styled-components"
 import axios from "axios"
-import { useState } from "react"
 
 export const Register = () => {
     const [newUserData, setNewUserData] = useState({})
