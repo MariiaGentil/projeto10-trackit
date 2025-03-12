@@ -1,32 +1,32 @@
 import { buildStyles, CircularProgressbar } from "react-circular-progressbar";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { PercentContext } from "../contexts/PercentContext";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components"
 import "react-circular-progressbar/dist/styles.css";
 
 
-export const HabitFooter = ({today}) => {
+export const HabitFooter = ({ today, history }) => {
     const navigate = useNavigate()
-    const {percentage, setPercentage} = useContext(PercentContext)
+    const { percentage, setPercentage } = useContext(PercentContext)
 
-    if(percentage === 99){
+    if (percentage === 99) {
         setPercentage(100)
-    } else if(percentage === 1){
+    } else if (percentage === 1) {
         setPercentage(0)
     }
 
-    function routeConfig() {
-        if (!today) {
-            navigate('/habitstoday')
-        } else{
-            navigate('/habits')
+    function routeConfig(elem) {
+        if(elem === 'habits'){
+            !today ? navigate('/habitstoday') : navigate('/habits')
+        } else if(elem === 'history'){
+            !history ? navigate('/habitshistory') : navigate('/habits')
         }
     }
 
     return (
         <DivFooter>
-            <p onClick={() => { routeConfig() }} className="route">{!today ? `Hábitos de Hoje` : `Todos os Hábitos`}</p>
+            <p onClick={() => { routeConfig('habits') }} className="route">{!today ? `Hábitos de Hoje` : `Todos os Hábitos`}</p>
             <div className="config-progress">
                 <div>
                     <CircularProgressbar value={percentage} text={`Hoje`} styles={buildStyles({
@@ -36,7 +36,7 @@ export const HabitFooter = ({today}) => {
                     })} />
                 </div>
             </div>
-            <p>Histórico</p>
+            <p onClick={() => { routeConfig('history') }} className="route">{!history ? `Histórico` : `Todos os Hábitos`}</p>
         </DivFooter>
     )
 }

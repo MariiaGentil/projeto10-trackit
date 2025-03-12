@@ -28,42 +28,47 @@ export const HabitMainToday = () => {
     )
 }
 
-const HabitsTodayList = ({ config, percentage, setPercentage }) => {
+const HabitsTodayList = ({ config, setPercentage }) => {
     const [habitsToday, setHabitsToday] = useState([])
     const [refresh, setRefresh] = useState([])
-    let percentageUni = parseInt(100 / habitsToday.length)
-
+    
     useEffect(() => {
         const promise = axios.get(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today`, config)
         promise.then(response => {
             const { data } = response
             setHabitsToday(data)
+            doneList(data)
         }).catch()
     }, [refresh]);
-
+    
     function toggleMarkDone(elemDone, elemID) {
         if (elemDone) {
             const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${elemID}/uncheck`, [], config)
             promise.then(() => {
                 setRefresh([])
             }
-            ).catch()
-            setPercentage(percentage - percentageUni)
-        } else {
-            const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${elemID}/check`, [], config)
-            promise.then(() => {
-                setRefresh([])
-            }
-            ).catch()
-            setPercentage(percentage + percentageUni)
+        ).catch()
+    } else {
+        const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${elemID}/check`, [], config)
+        promise.then(() => {
+            setRefresh([])
         }
+    ).catch()
+}
+}
+
+function doneList(data){
+        let percentageUnidade = parseInt(100 / data.length)
+        let value = 0
+        data.map(elem => {elem.done ? value += percentageUnidade : ''})
+        setPercentage(value)
     }
 
     return (
         <DivHabitTemplate>
             <div>
                 {habitsToday.map(elem => {
-                    return (<HabitList elem={elem} toggleMarkDone={toggleMarkDone} />)
+                    return (<HabitList elem={elem} toggleMarkDone={toggleMarkDone} key={elem} />)
                 })}
             </div>
         </DivHabitTemplate>
@@ -79,7 +84,7 @@ const HabitList = ({ elem, toggleMarkDone }) => {
             <div>
                 <p className="title-habit">{elem.name}</p>
                 <p className="description">Sequência atual: <span className={elem.done ? `green-color` : ``}>{elem.currentSequence} dias</span></p>
-                <p className="description">Seu recorde: <span className={elem.done ? `green-color` : ``}>{elem.highestSequence} dias</span></p>
+                <p className="description">Seu recorde: <span className={elem.done && elem.currentSequence === elem.highestSequence ? `green-color` : ``}>{elem.highestSequence} dias</span></p>
             </div>
             <div className={elem.done ? `check-mark green-bg` : `check-mark`} onClick={() => { toggleMarkDone(elem.done, elem.id) }}>
                 <ion-icon name="checkmark-outline"></ion-icon>
@@ -92,7 +97,7 @@ const HabitList = ({ elem, toggleMarkDone }) => {
 const DivDataProgress = styled.div`
 
     font-family: var(--primary-font);
-    margin: 30px 0 50px 20px;
+    margin: 20px 0 50px 10px;
     overflow-y: auto;
     
     p.day{
