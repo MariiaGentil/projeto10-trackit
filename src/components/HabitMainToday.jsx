@@ -97,7 +97,7 @@ const HabitList = ({ elem, toggleMarkDone }) => {
 const DivDataProgress = styled.div`
 
     font-family: var(--primary-font);
-    margin: 20px 0 50px 10px;
+    margin: 30px 0 50px 20px;
     overflow-y: auto;
     
     p.day{

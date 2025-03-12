@@ -219,7 +219,7 @@ const DivHabitTitle = styled.div`
     font-family: var(--primary-font);
     display: flex;
     justify-content: space-between;
-    padding: 20px 40px 20px 10px;
+    padding: 30px 40px 20px 20px;
 
     p{
         font-size: 22px;
