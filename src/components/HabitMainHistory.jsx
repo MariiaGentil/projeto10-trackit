@@ -73,20 +73,19 @@ const DivHistoryTemplate = styled.div`
 `
 
 const CalendarContainer = styled.div`
-    width: 500px;
     margin: 0 auto;
     display: flex;
     justify-content: center;
     
     .calendar{
-        width: 90%;
+        width: 90vw;
         border-radius: 5px;
         border: none;
         font-family: var(--primary-font);
     }
 
     .number-day{
-        height: 50px;
+        height: 30px;
         font-size: 20px;
         display: flex;
         justify-content: center;
